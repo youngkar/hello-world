@@ -1,5 +1,3 @@
-# hello-world
-My very own first repository
+# Simple Animator
 
-
-Hello! I am new to learning GitHub. Wish me luck. 
+This is a simple animator, built with Java using MVC architecture. 
