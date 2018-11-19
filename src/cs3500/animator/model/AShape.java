@@ -50,7 +50,30 @@ public abstract class AShape implements IShape {
 
   @Override
   public void addToDir(Keyframe kf) throws IllegalArgumentException {
-    int size = this.directions.size();
+    boolean found = false;
+    if (this.directions.isEmpty()) {
+      this.directions.add(kf);
+    } else {
+      for (int i = 0; i < this.directions.size(); i++) {
+        if (this.directions.get(i).getTime() > kf.getTime()) {
+          this.directions.add(i, kf);
+          found = true;
+          break;
+        } else if(this.directions.get(i).getTime() == kf.getTime()) {
+          this.directions.set(i,kf);
+          found = true;
+          break;
+        }
+      }
+
+      if(!found) {
+        this.directions.add(kf);
+      }
+
+
+    }
+
+    /*int size = this.directions.size();
     if (this.directions.isEmpty()) {
       this.directions.add(kf);
     } else if (this.directions.size() == 1) {
@@ -76,7 +99,7 @@ public abstract class AShape implements IShape {
           break;
         }
       }
-    }
+    }*/
   }
 
   @Override
@@ -87,7 +110,7 @@ public abstract class AShape implements IShape {
   public String getInfo() {
     StringBuilder result = new StringBuilder();
     for (int i = 0; i < directions.size() - 1; i++) {
-      result.append(directions.get(i).getKeyInfo()
+      result.append("motion " + this.getName() + directions.get(i).getKeyInfo()
               + " " + directions.get(i + 1).getKeyInfo() + "\n");
     }
     return result.toString();
@@ -113,6 +136,21 @@ public abstract class AShape implements IShape {
       }
     }
     return this;
+  }
+
+  @Override
+  public void removeKeyframe(Keyframe key) {
+    Keyframe dummy = null;
+
+    for(Keyframe keyframe : directions) {
+      if(keyframe.equals(key)) {
+        dummy = key;
+      }
+    }
+
+    if (dummy != null) {
+      directions.remove(dummy);
+    }
   }
 
   @Override

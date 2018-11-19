@@ -10,4 +10,6 @@ public interface Keyframe {
 
   String getSVG(double speed, String shapeAtt);
 
+  void editKF(int time, int x, int y, int w, int h, int r, int g, int b);
+
 }

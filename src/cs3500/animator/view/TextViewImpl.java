@@ -9,7 +9,7 @@ import cs3500.animator.model.ROAnimator;
  */
 public class TextViewImpl implements View {
   private ROAnimator roa;
-
+  private Appendable ap;
 
 
   /**
@@ -19,12 +19,17 @@ public class TextViewImpl implements View {
    */
   public TextViewImpl(ROAnimator roa, Appendable ap) {
     this.roa = roa;
+    this.ap = ap;
 
   }
 
   @Override
   public void go() {
-    roa.printDesc();
+    try {
+      ap.append(roa.printDesc());
+    } catch (IOException e) {
+      throw new IllegalStateException("Error trying to append to appendable.");
+    }
   }
 
 }
