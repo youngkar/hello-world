@@ -11,6 +11,7 @@ import cs3500.animator.util.AnimationBuilder;
 import cs3500.animator.util.AnimationBuilderImpl;
 import cs3500.animator.util.AnimationReader;
 import cs3500.animator.view.CompositeViewImpl;
+import cs3500.animator.view.SVGViewImpl;
 import cs3500.animator.view.TextViewImpl;
 import cs3500.animator.view.View;
 import cs3500.animator.view.VisualViewImpl;
@@ -22,7 +23,7 @@ public final class MAIN {
   public static void main(String[] args) throws FileNotFoundException {
     AnimationBuilder<Animator> builder = new AnimationBuilderImpl();
 
-    String filename = "hanoi.txt";
+    String filename = "buildings.txt";
     FileReader read = new FileReader(filename);
     Animator model = AnimationReader.parseFile(read, builder);
     ROAnimator ro = model;
@@ -30,13 +31,13 @@ public final class MAIN {
 
 //    View textview = new TextViewImpl(ro, app);
 //    textview.go();
-//    System.out.println(((TextViewImpl) textview).ap);
+//    System.out.println(app.toString());
 
   //  View vv = new VisualViewImpl(ro, 15, 800, 1000);
   //  vv.go();
 
-    //View v = new SVGViewImpl(1, 1000, 1000, ro, System.out);
-    //v.go();
+//    View v = new SVGViewImpl(1, 1000, 1000, ro, System.out);
+//    v.go();
 
 
 

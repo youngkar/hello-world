@@ -128,5 +128,10 @@ public interface    IShape {
    */
   void setCT(int t);
 
+  /**
+   * removes the KeyFrame from the listofKeyframes.
+   * @param key the keyframe to be removed.
+   */
+  void removeKeyframe(Keyframe key);
 
 }

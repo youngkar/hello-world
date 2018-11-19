@@ -23,7 +23,7 @@ public final class Excellence {
     String fileName = "";
     String outFile = "";
     String view = "";
-    double speed = -1.0;
+    double speed = 10;
 
 
     int size = args.length;
@@ -81,15 +81,15 @@ public final class Excellence {
 
       }
 
-      FileWriter outPut = new FileWriter("");
-
-      if (speed == -1.0) {
-        JOptionPane.showMessageDialog(null,
-                "Needs an valid input",
-                "Speed Error",
-                JOptionPane.ERROR_MESSAGE);
-
+      Appendable outPut;
+      if(!outFile.equals("")) {
+        System.out.println(outFile);
+        outPut = new FileWriter(outFile);
+      } else {
+        outPut = System.out;
       }
+
+
 
       if (view.equals("svg")) {
         View svg = new SVGViewImpl(speed, 1000, 1000, goModel, outPut);

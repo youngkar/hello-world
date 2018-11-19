@@ -2,6 +2,7 @@ package cs3500.animator.model;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -9,7 +10,7 @@ import java.util.Map;
  * AnimatorImpl represents an animation. It holds all the data for all the different shapes in it.
  */
 public final class AnimatorImpl implements Animator {
-  private Map<String, AShape> shapes = new HashMap<>();
+  private Map<String, AShape> shapes = new LinkedHashMap<>();
   private StringBuilder str = new StringBuilder();
 
   public AnimatorImpl(Map<String, AShape> shapes) {
@@ -31,7 +32,6 @@ public final class AnimatorImpl implements Animator {
       throw new IllegalArgumentException("AShape with that name already exists.");
     }
     s.setCT(time);
-    //TODO: add a shape into the animation, AT THE GIVEN TIME...
     shapes.put(s.name, s);
     shapes.get(s.name).addToDir(new KeyframeImpl(time, s.xPos, s.yPos, s.width, s.height,
             s.getC().getRed(), s.getC().getGreen(), s.getC().getBlue()));
@@ -90,7 +90,9 @@ public final class AnimatorImpl implements Animator {
   public Map<String, AShape> getFrame(int time) {
     Map<String, AShape> data = new HashMap<>();
     for (AShape s : shapes.values()) {
-      data.put(s.name, this.getState(time, s.name));
+      if (s.getCT() <= time) {
+        data.put(s.name, this.getState(time, s.name));
+      }
     }
     return data;
   }

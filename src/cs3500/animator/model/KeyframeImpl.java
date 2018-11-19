@@ -36,11 +36,23 @@ public class KeyframeImpl implements Keyframe {
 
   @Override
   public String getKeyInfo() {
-    return null;
+    return " " + time + " " + x + " " + y + " " + w + " " + h + " " + r + " " + g + " " + b;
   }
 
   @Override
   public String getSVG(double speed, String shapeAtt) {
     return null;
+  }
+
+  @Override
+  public void editKF(int time, int x, int y, int w, int h, int r, int g, int b) {
+    this.time = time;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.r = r;
+    this.g = g;
+    this.b = b;
   }
 }
