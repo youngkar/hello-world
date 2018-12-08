@@ -1,0 +1,179 @@
+package cs3500.animator.model;
+
+import java.util.Objects;
+
+public class KeyframeImpl implements Keyframe {
+  private int time;
+  private int x;
+  private int y;
+  private int w;
+  private int h;
+  private int r;
+  private int g;
+  private int b;
+
+  /**
+   * Represents a Keyframe, all the data of a shape at a specific time.
+   *
+   * @param time The time at which the keyframe exists.
+   * @param x    The x coordinate of this keyframe.
+   * @param y    The y coordinate of this keyframe.
+   * @param w    The width of this keyframe.
+   * @param h    The height of this keyframe.
+   * @param r    The red value of this keyframe.
+   * @param g    The green value of this keyframe.
+   * @param b    The blue value this keyframe.
+   */
+  public KeyframeImpl(int time, int x, int y, int w, int h, int r, int g, int b) {
+    this.time = time;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.r = r;
+    this.g = g;
+    this.b = b;
+  }
+
+
+  @Override
+  public AShape getState() {
+    AShape s = new Rectangle("holder", x, y, w, h, new OurColor(r, g, b));
+    return s;
+  }
+
+  @Override
+  public int getTime() {
+    int holder = this.time;
+    return holder;
+  }
+
+  @Override
+  public int getX() {
+    return x;
+  }
+
+  @Override
+  public int getY() {
+    return y;
+  }
+
+  @Override
+  public int getW() {
+    return w;
+  }
+
+  @Override
+  public int getH() {
+    return h;
+  }
+
+  @Override
+  public int getR() {
+    return r;
+  }
+
+  @Override
+  public int getG() {
+    return g;
+  }
+
+  @Override
+  public int getB() {
+    return b;
+  }
+
+  @Override
+  public String getKeyInfo() {
+    return " " + time + " " + x + " " + y + " " + w + " " + h + " " + r + " " + g + " " + b;
+  }
+
+  @Override
+  public String getSVG(double speed, Keyframe nextKF, String shapeAtt) {
+    StringBuilder result = new StringBuilder();
+    double dur = nextKF.getTime() - this.getTime();
+
+    if (shapeAtt.equalsIgnoreCase("rect")) {
+      if (this.getX() != nextKF.getX()) {
+        this.svgTemp(result, speed, dur, "x",
+                Integer.toString(this.getX()), Integer.toString(nextKF.getX()));
+      }
+      if (this.getY() != nextKF.getY()) {
+        this.svgTemp(result, speed, dur, "y",
+                Integer.toString(this.getY()), Integer.toString(nextKF.getY()));
+      }
+      if (this.getW() != nextKF.getW()) {
+        this.svgTemp(result, speed, dur, "width",
+                Integer.toString(this.getW()), Integer.toString(nextKF.getW()));
+      }
+      if (this.getH() != nextKF.getH()) {
+        this.svgTemp(result, speed, dur, "height",
+                Integer.toString(this.getH()), Integer.toString(nextKF.getH()));
+      }
+      if (this.getR() != nextKF.getR() || this.getG() != nextKF.getG() ||
+              this.getB() != nextKF.getB()) {
+        this.svgTemp(result, speed, dur, "fill",
+                new OurColor(this.getR(), this.getG(), this.getB()).formatSVG(),
+                new OurColor(nextKF.getR(), nextKF.getG(), nextKF.getB()).formatSVG());
+      }
+    } else {
+      if (this.getX() != nextKF.getX()) {
+        this.svgTemp(result, speed, dur, "cx",
+                Integer.toString(this.getX()), Integer.toString(nextKF.getX()));
+      }
+      if (this.getY() != nextKF.getY()) {
+        this.svgTemp(result, speed, dur, "cy",
+                Integer.toString(this.getY()), Integer.toString(nextKF.getY()));
+      }
+      if (this.getW() != nextKF.getW()) {
+        this.svgTemp(result, speed, dur, "rx",
+                Integer.toString(this.getW() / 2), Integer.toString(nextKF.getW() / 2));
+      }
+      if (this.getH() != nextKF.getH()) {
+        this.svgTemp(result, speed, dur, "ry",
+                Integer.toString(this.getH() / 2), Integer.toString(nextKF.getH() / 2));
+      }
+      if (this.getR() != nextKF.getR() || this.getG() != nextKF.getG() ||
+              this.getB() != nextKF.getB()) {
+        this.svgTemp(result, speed, dur, "fill",
+                new OurColor(this.getR(), this.getG(), this.getB()).formatSVG(),
+                new OurColor(nextKF.getR(), nextKF.getG(), nextKF.getB()).formatSVG());
+      }
+    }
+    return result.toString();
+  }
+
+  private void svgTemp(StringBuilder sb, double speed, double dur, String att, String from,
+          String to) {
+    sb.append("\n\t<animate attributeType=\"xml\" begin=\"").append(100 * this.time)
+            .append("ms\" dur=\"").append(100 * speed * dur).append("ms\" attributeName=\"")
+            .append(att).append("\" from=\"").append(from).append("\" to=\"").append(to)
+            .append("\" fill=\"freeze\" />");
+  }
+
+  /**
+   * Defines equality for Keyframes.
+   *
+   * @param other an Object to check equal.
+   * @return A boolean representing whether the two objects are equal.
+   */
+  public boolean equals(Object other) {
+    if (!(other instanceof Keyframe)) {
+      return false;
+    }
+    // this cast is safe, because we just checked instanceof
+    Keyframe that = (Keyframe) other;
+
+
+    return this.time == that.getTime() && this.x == that.getX() && this.y == that.getY()
+            && this.w == that.getW() && this.h == that.getH() && this.r == that.getR()
+            && this.g == that.getG() && this.b == that.getB();
+  }
+
+
+  public int hashCode() {
+    return Objects.hash(this.getTime(), this.getX(), this.getY(), this.getW(),
+            this.getH(), this.getR(), this.getG(), this.getB());
+  }
+
+}
