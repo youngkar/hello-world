@@ -69,6 +69,11 @@ public interface Keyframe {
   int getB();
 
   /**
+   *
+   */
+  int getRot();
+
+  /**
    * Describes the animation in text format.
    *
    * @returnn description of the keyframe.

@@ -122,18 +122,23 @@ public interface IShape {
   int getCT();
 
   /**
-   * gets the degrees that this shape is rotated. 
-   *
-   * @return the rotation of the shape in degrees.
-   */
-  int getRotation();
-
-  /**
    * sets the created time of the shape.
    *
    * @param t sets the created time.
    */
   void setCT(int t);
+
+  /**
+   * gets the rotation of this shape in degrees.
+   *
+   * @return the rotation of this shape in degrees.
+   */
+  int getRot();
+
+  /**
+   *
+   */
+  AShape addLayer(int layer);
 
   /**
    * removes the KeyFrame from the listofKeyframes.

@@ -39,9 +39,6 @@ public final class VisualViewImpl extends JFrame implements View {
 
     // Setting up the borders
     this.setLayout(new BorderLayout());
-    pane = new JScrollPane(panel, pane.VERTICAL_SCROLLBAR_AS_NEEDED,
-            pane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    this.add(pane);
 
     // would have to change a lot of code to get rid of these.
 
@@ -52,7 +49,8 @@ public final class VisualViewImpl extends JFrame implements View {
     // Creating the new Panel
     this.panel = new CustomJPanel();
     panel.setPreferredSize(new Dimension(wCanvas, hCanvas));
-    this.add(panel);
+    pane = new JScrollPane(panel);
+    this.add(pane);
     this.time = 1;
     this.pack();
 

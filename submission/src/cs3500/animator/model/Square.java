@@ -18,6 +18,10 @@ public final class Square extends AShape {
     super(name, xPos, yPos, side, side, col);
   }
 
+  public Square(String name, int xPos, int yPos, int side, OurColor col, int rot) {
+    super(name, xPos, yPos, side, side, col, rot);
+  }
+
   @Override
   public String shapeName() {
     return "square";
@@ -25,7 +29,7 @@ public final class Square extends AShape {
 
   @Override
   public AShape copy() {
-    return new Square(this.name, this.xPos, this.yPos, this.width, this.col);
+    return new Square(this.getName(), this.getX(), this.getY(), this.getW(), this.getC());
   }
 
 }

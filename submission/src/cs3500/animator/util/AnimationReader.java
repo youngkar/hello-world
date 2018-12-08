@@ -86,25 +86,37 @@ public class AnimationReader {
       "initial time",
       "initial x-coordinate", "initial y-coordinate",
       "initial width", "initial height",
-      "initial red value", "initial green value", "initial blue value",
+      "initial red value", "initial green value", "initial blue value", "initial rotation",
       "final time",
       "final x-coordinate", "final y-coordinate",
       "final width", "final height",
-      "final red value", "final green value", "final blue value",
+      "final red value", "final green value", "final blue value", "final rotation"
     };
-    int[] vals = new int[16];
+    int[] vals = new int[18];
     String name;
     if (s.hasNext()) {
       name = s.next();
     } else {
       throw new IllegalStateException("Motion: Expected a shape name, but no more input available");
     }
-    for (int i = 0; i < 16; i++) {
-      vals[i] = getInt(s, "Motion", fieldNames[i]);
+    int i;
+    for (i = 0; i < 18; i++) {
+      try {
+        vals[i] = getInt(s, "Motion", fieldNames[i]);
+      } catch (IllegalStateException ise) {
+        break;
+      }
     }
-    builder.addMotion(name,
-            vals[0], vals[1], vals[2 ], vals[3 ], vals[4 ], vals[5 ], vals[6 ], vals[7 ],
-            vals[8], vals[9], vals[10], vals[11], vals[12], vals[13], vals[14], vals[15]);
+    if (i < 17) {
+      builder.addMotion(name,
+              vals[0], vals[1], vals[2], vals[3], vals[4], vals[5], vals[6], vals[7],
+              vals[8], vals[9], vals[10], vals[11], vals[12], vals[13], vals[14], vals[15]);
+    } else {
+      builder.addMotion(name,
+              vals[0], vals[1], vals[2], vals[3], vals[4], vals[5], vals[6], vals[7],
+              vals[8], vals[9], vals[10], vals[11], vals[12], vals[13], vals[14], vals[15],
+              vals[16], vals[17]);
+    }
   }
   
   private static int getInt(Scanner s, String label, String fieldName) {
@@ -112,7 +124,7 @@ public class AnimationReader {
       return s.nextInt();
     } else if (s.hasNext()) {
       throw new IllegalStateException(
-              String.format("%s: expected integer for %s, got: %s", label, fieldName, s.next()));
+              String.format("%s: expected integer for %s, got:", label, fieldName));
     } else {
       throw new IllegalStateException(
               String.format("%s: expected integer for %s, but no more input available",

@@ -19,6 +19,10 @@ public final class Oval extends AShape {
     super(name, xPos, yPos, width, height, col);
   }
 
+  public Oval(String name, int xPos, int yPos, int width, int height, OurColor col, int rot) {
+    super(name, xPos, yPos, width, height, col, rot);
+  }
+
   @Override
   public String shapeName() {
     return "ellipse";
@@ -26,7 +30,8 @@ public final class Oval extends AShape {
 
   @Override
   public AShape copy() {
-    return new Oval(this.name, this.xPos, this.yPos, this.width, this.height, this.col);
+    return new Oval(this.getName(),
+            this.getX(), this.getY(), this.getW(), this.getH(), this.getC());
   }
 }
 

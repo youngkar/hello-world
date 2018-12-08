@@ -18,6 +18,10 @@ public final class Circle extends AShape {
     super(name, xPos, yPos, radius * 2, radius * 2, col);
   }
 
+  public Circle(String name, int xPos, int yPos, int radius, OurColor col, int rot) {
+    super(name, xPos, yPos, radius * 2, radius * 2, col, rot);
+  }
+
   @Override
   public String shapeName() {
     return "circle";
@@ -25,6 +29,7 @@ public final class Circle extends AShape {
 
   @Override
   public AShape copy() {
-    return new Circle(this.name, this.xPos, this.yPos, this.width / 2, this.col);
+    return new Circle(this.getName(),
+            this.getX(), this.getY(), this.getW() / 2, this.getC());
   }
 }

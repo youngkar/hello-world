@@ -94,7 +94,7 @@ public final class Excellence {
       }
 
       if (view.equals("visual")) {
-        View visual = new VisualViewImpl(model, (int) speed, 1000, 1000);
+        View visual = new VisualViewImpl(model, (int) speed, 1000, 800);
         visual.beginAnimation();
       }
 

@@ -19,6 +19,10 @@ public final class Rectangle extends AShape {
     super(name, xPos, yPos, width, height, col);
   }
 
+  public Rectangle(String name, int xPos, int yPos, int width, int height, OurColor col, int rot) {
+    super(name, xPos, yPos, width, height, col, rot);
+  }
+
   @Override
   public String shapeName() {
     return "rectangle";
@@ -26,7 +30,8 @@ public final class Rectangle extends AShape {
 
   @Override
   public AShape copy() {
-    return new Rectangle(this.name, this.xPos, this.yPos, this.width, this.height, this.col);
+    return new Rectangle(this.getName(),
+            this.getX(), this.getY(), this.getW(), this.getH(), this.getC());
   }
 
 

@@ -8,16 +8,16 @@ import java.util.List;
  * methods that are the same for all shapes.
  */
 public abstract class AShape implements IShape {
-  protected String name;
-  protected int width;
-  protected int height;
+  private String name;
+  private int width;
+  private int height;
   private int xPos;
   private int yPos;
   private OurColor col;
-  private int degree;
   private int createdTime;
   private List<Keyframe> directions;
-
+  private int rotation;
+  private int layer;
 
   /**
    * Constructor for an abstract AShape.
@@ -42,6 +42,29 @@ public abstract class AShape implements IShape {
     this.height = height;
     this.col = col;
     directions = new ArrayList<>();
+  }
+
+  /**
+   *
+   * @param name
+   * @param xPos
+   * @param yPos
+   * @param width
+   * @param height
+   * @param col
+   * @param rot
+   * @throws IllegalArgumentException
+   */
+  public AShape(String name, int xPos, int yPos, int width, int height,
+                OurColor col, int rot) throws IllegalArgumentException {
+    this(name, xPos, yPos, width, height, col);
+    this.rotation = rot;
+  }
+
+  @Override
+  public AShape addLayer(int layer) {
+    this.layer = layer;
+    return this;
   }
 
   @Override
@@ -70,37 +93,7 @@ public abstract class AShape implements IShape {
       if (!found) {
         this.directions.add(kf);
       }
-
-
     }
-
-    /*int size = this.directions.size();
-    if (this.directions.isEmpty()) {
-      this.directions.add(kf);
-    } else if (this.directions.size() == 1) {
-      if (this.directions.get(0).getTime() > kf.getTime()) {
-        this.directions.add(0, kf);
-      } else {
-        this.directions.add(kf);
-      }
-    } else {
-
-      for (int i = 0; i < size - 1; i++) {
-        int begin = this.directions.get(i).getTime();
-        int end = this.directions.get(i + 1).getTime();
-        if (begin == kf.getTime()) {
-          throw new IllegalArgumentException("cannot have multiple keyframes at the same time: "
-                  + i + " " + this.directions.size());
-        }
-        if (begin < kf.getTime() && end > kf.getTime()) {
-          directions.add(i, kf);
-          break;
-        } else {
-          directions.add(kf);
-          break;
-        }
-      }
-    }*/
   }
 
   @Override
@@ -210,6 +203,9 @@ public abstract class AShape implements IShape {
     this.createdTime = t;
   }
 
+  @Override
+  public int getRot() { return this.rotation; }
+
   /**
    * Returns the tweened value of the component at a time or a intermediate state.
    *
@@ -238,6 +234,10 @@ public abstract class AShape implements IShape {
             initshape.height, finalshape.height);
     this.width = width;
     this.height = height;
+
+    int rot = this.tween(time, initval.getTime(), finalval.getTime(),
+            initval.getRot(), finalval.getRot());
+    this.rotation = rot;
   }
 
 

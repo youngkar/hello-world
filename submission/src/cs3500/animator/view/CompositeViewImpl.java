@@ -7,20 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 
-import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.Timer;
-import javax.swing.JLabel;
-import javax.swing.DefaultListModel;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 
 import cs3500.animator.controller.ListSelectListener;
 import cs3500.animator.model.AShape;
@@ -76,6 +63,7 @@ public final class CompositeViewImpl extends JFrame implements CompositeView {
   private JTextField r;
   private JTextField g;
   private JTextField b;
+  private JTextField addSRot;
 
   //addKeyframe text fields
   private JTextField newT;
@@ -86,6 +74,7 @@ public final class CompositeViewImpl extends JFrame implements CompositeView {
   private JTextField newR;
   private JTextField newG;
   private JTextField newB;
+  private JTextField newRot;
 
   //editKeyframe text fields
   private JTextField editX;
@@ -95,7 +84,9 @@ public final class CompositeViewImpl extends JFrame implements CompositeView {
   private JTextField editR;
   private JTextField editG;
   private JTextField editB;
+  private JTextField editRot;
 
+  private JScrollBar scrub;
   private JPanel selectionListPanel;
   private Timer t;
 
@@ -133,6 +124,10 @@ public final class CompositeViewImpl extends JFrame implements CompositeView {
     // controls.setBorder(BorderFactory.createTitledBorder("Controls"));
     controls.setLayout(new BoxLayout(controls, BoxLayout.PAGE_AXIS));
     interactions.add(controls);
+
+    scrub = new JScrollBar(0, 0, 0, 0, roa.getLastTick());
+    controls.add(scrub);
+    pack();
 
     //play button
     playButton = new JButton("Play");
@@ -247,8 +242,7 @@ public final class CompositeViewImpl extends JFrame implements CompositeView {
     // Creating the new Panel
     this.panel = new CustomJPanel();
     panel.setPreferredSize(new Dimension(canvasW, canvasH));
-    pane = new JScrollPane(panel, pane.VERTICAL_SCROLLBAR_AS_NEEDED,
-            pane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    pane = new JScrollPane(panel);
     this.add(pane);
     this.time = 1;
     pack();
@@ -264,11 +258,15 @@ public final class CompositeViewImpl extends JFrame implements CompositeView {
       public void actionPerformed(ActionEvent e) {
         panel.setTheMap(roa.getFrame(time));
         CompositeViewImpl.this.refresh();
-        if (!paused) {
-          time = time + speed;
+        if (scrub.getValueIsAdjusting()) {
+          time = scrub.getValue();
+        } else {
+          if (!paused) {
+            time = time + speed;
 
-          if (looping && time >= lasttick) {
-            time = 0;
+            if (looping && time >= lasttick) {
+              time = 0;
+            }
           }
         }
       }
@@ -405,6 +403,10 @@ public final class CompositeViewImpl extends JFrame implements CompositeView {
     addS.add(new JLabel("b:"));
     addS.add(b);
 
+    addSRot = new JTextField(3);
+    addS.add(new JLabel("rotation"));
+    addS.add(addSRot);
+
     JOptionPane.showConfirmDialog(null, addS, "Enter Values",
             JOptionPane.OK_CANCEL_OPTION);
   }
@@ -424,17 +426,18 @@ public final class CompositeViewImpl extends JFrame implements CompositeView {
     OurColor col = new OurColor(Integer.parseInt(r.getText()), Integer.parseInt(g.getText()),
             Integer.parseInt(b.getText()));
     String shapeType = (String) chooseShape.getSelectedItem();
+    int rot = Integer.parseInt(addSRot.getText());
 
     assert shapeType != null;
     switch (shapeType) {
       case "Rectangle":
-        return new Rectangle(name, x, y, w, h, col);
+        return new Rectangle(name, x, y, w, h, col, rot);
       case "Circle":
-        return new Circle(name, x, y, w, col);
+        return new Circle(name, x, y, w, col, rot);
       case "Square":
-        return new Square(name, x, y, w, col);
+        return new Square(name, x, y, w, col, rot);
       case "Ellipse":
-        return new Oval(name, x, y, w, h, col);
+        return new Oval(name, x, y, w, h, col, rot);
       default:
         return null;
     }
@@ -450,8 +453,9 @@ public final class CompositeViewImpl extends JFrame implements CompositeView {
     int r = Integer.parseInt(newR.getText());
     int g = Integer.parseInt(newG.getText());
     int b = Integer.parseInt(newB.getText());
+    int rot = Integer.parseInt(newRot.getText());
 
-    return new KeyframeImpl(t, x, y, w, h, r, g, b);
+    return new KeyframeImpl(t, x, y, w, h, r, g, b, rot);
   }
 
   @Override
@@ -464,8 +468,9 @@ public final class CompositeViewImpl extends JFrame implements CompositeView {
     int r = Integer.parseInt(editR.getText());
     int g = Integer.parseInt(editG.getText());
     int b = Integer.parseInt(editB.getText());
+    int rot = Integer.parseInt(editRot.getText());
 
-    return new KeyframeImpl(time, x, y, w, h, r, g, b);
+    return new KeyframeImpl(time, x, y, w, h, r, g, b, rot);
   }
 
   @Override
@@ -549,6 +554,10 @@ public final class CompositeViewImpl extends JFrame implements CompositeView {
     addKF.add(new JLabel("b:"));
     addKF.add(newB);
 
+    newRot = new JTextField(3);
+    addKF.add(new JLabel("Rotation:"));
+    addKF.add(newRot);
+
     JOptionPane.showConfirmDialog(null, addKF, "Enter Values",
             JOptionPane.OK_CANCEL_OPTION);
   }
@@ -580,6 +589,10 @@ public final class CompositeViewImpl extends JFrame implements CompositeView {
     editB = new JTextField(Integer.toString(this.getKFToEdit().getB()), 3);
     editKF.add(new JLabel("b:"));
     editKF.add(editB);
+
+    editRot = new JTextField(Integer.toString(this.getKFToEdit().getRot()), 3);
+    editKF.add(new JLabel("Rotation:"));
+    editKF.add(editRot);
 
     JOptionPane.showConfirmDialog(null, editKF, "Enter Values",
             JOptionPane.OK_CANCEL_OPTION);

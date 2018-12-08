@@ -24,12 +24,12 @@ public final class AnimatorImpl implements Animator {
 
   @Override
   public void createShape(AShape s, int time) {
-    if (shapes.containsKey(s.name) || time < 0) {
+    if (shapes.containsKey(s.getName()) || time < 0) {
       throw new IllegalArgumentException("AShape with that name already exists.");
     }
     s.setCT(time);
-    shapes.put(s.name, s);
-    shapes.get(s.name).addToDir(new KeyframeImpl(time, s.xPos, s.yPos, s.width, s.height,
+    shapes.put(s.getName(), s);
+    shapes.get(s.getName()).addToDir(new KeyframeImpl(time, s.getX(), s.getY(), s.getW(), s.getH(),
             s.getC().getRed(), s.getC().getGreen(), s.getC().getBlue()));
   }
 
@@ -65,7 +65,7 @@ public final class AnimatorImpl implements Animator {
       throw new IllegalArgumentException("AShape does not exist.");
     }
     AShape s = shapes.get(name);
-    return "shape" + " " + s.name + " " + s.shapeName() + "\n" + s.getInfo();
+    return "shape" + " " + s.getName() + " " + s.shapeName() + "\n" + s.getInfo();
   }
 
   @Override
@@ -73,9 +73,9 @@ public final class AnimatorImpl implements Animator {
     for (AShape s : shapes.values()) {
       System.out.println(str.length());
       if (str.length() < 1) {
-        str.append(printSInfo(s.name));
+        str.append(printSInfo(s.getName()));
       } else {
-        str.append("\n").append(printSInfo(s.name));
+        str.append("\n").append(printSInfo(s.getName()));
 
       }
     }
@@ -99,7 +99,7 @@ public final class AnimatorImpl implements Animator {
     Map<String, AShape> data = new LinkedHashMap<>();
     for (AShape s : shapes.values()) {
       if (s.getCT() <= time) {
-        data.put(s.name, this.getState(time, s.name));
+        data.put(s.getName(), this.getState(time, s.getName()));
       }
     }
     return data;

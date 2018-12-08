@@ -11,6 +11,7 @@ public class KeyframeImpl implements Keyframe {
   private int r;
   private int g;
   private int b;
+  private int rot;
 
   /**
    * Represents a Keyframe, all the data of a shape at a specific time.
@@ -33,6 +34,11 @@ public class KeyframeImpl implements Keyframe {
     this.r = r;
     this.g = g;
     this.b = b;
+  }
+
+  public KeyframeImpl(int time, int x, int y, int w, int h, int r, int g, int b, int rot) {
+    this(time, x, y, w, h, r, g, b);
+    this.rot = rot;
   }
 
 
@@ -82,6 +88,9 @@ public class KeyframeImpl implements Keyframe {
   public int getB() {
     return b;
   }
+
+  @Override
+  public int getRot() { return this.rot; };
 
   @Override
   public String getKeyInfo() {
