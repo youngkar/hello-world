@@ -149,13 +149,20 @@ public class KeyframeImpl implements Keyframe {
                 new OurColor(nextKF.getR(), nextKF.getG(), nextKF.getB()).formatSVG());
       }
     }
+    if (this.getRot() != nextKF.getRot()) {
+      result.append("\n\t<animateTransform attributeName=\"transform\" type=\"rotate\" begin=\""+
+              (10*speed*this.time) + "ms\" dur=\"" + (10*speed*dur) + "ms\" from=\""
+              + this.getRot() + " " + (this.getX()+(this.getW()/2)) + " " + (this.getY()+(this.getH()/2))
+              + "\" to=\"" + nextKF.getRot() + " " + (nextKF.getX()+(this.getW()/2)) + " " +
+              (nextKF.getY()+(nextKF.getH()/2)) + "\" />");
+    }
     return result.toString();
   }
 
   private void svgTemp(StringBuilder sb, double speed, double dur, String att, String from,
           String to) {
-    sb.append("\n\t<animate attributeType=\"xml\" begin=\"").append(100 * this.time)
-            .append("ms\" dur=\"").append(100 * speed * dur).append("ms\" attributeName=\"")
+    sb.append("\n\t<animate attributeType=\"xml\" begin=\"").append(10 * speed * this.time)
+            .append("ms\" dur=\"").append(10 * speed * dur).append("ms\" attributeName=\"")
             .append(att).append("\" from=\"").append(from).append("\" to=\"").append(to)
             .append("\" fill=\"freeze\" />");
   }
@@ -176,13 +183,13 @@ public class KeyframeImpl implements Keyframe {
 
     return this.time == that.getTime() && this.x == that.getX() && this.y == that.getY()
             && this.w == that.getW() && this.h == that.getH() && this.r == that.getR()
-            && this.g == that.getG() && this.b == that.getB();
+            && this.g == that.getG() && this.b == that.getB() && this.rot == that.getRot();
   }
 
 
   public int hashCode() {
     return Objects.hash(this.getTime(), this.getX(), this.getY(), this.getW(),
-            this.getH(), this.getR(), this.getG(), this.getB());
+            this.getH(), this.getR(), this.getG(), this.getB(), this.getRot());
   }
 
 }
